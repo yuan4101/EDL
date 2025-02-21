@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include "basicOperations.c"
+#include "sort.c"
+void printMenu();
+void exitMenu();
+void exercise1();
+void exercise2();
+void exercise3();
+void exercise4();
+void exercise5();
