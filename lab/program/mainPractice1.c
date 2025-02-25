@@ -1,4 +1,4 @@
-#include "practice1.c"
+#include "../implements/practice1.c"
 
 int main(){
     int opt;

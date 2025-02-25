@@ -1,4 +1,4 @@
-#include "dependencies.h"
+#include "../header/dependencies.h"
 
 void printMenu(){
     printf("*****   M E N U   *****\n");

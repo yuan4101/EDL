@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "basicOperations.c"
-#include "sort.c"
+#include "../lib/basicOperations.c"
+#include "../lib/sort.c"
 void printMenu();
 void exitMenu();
 void exercise1();
