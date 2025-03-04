@@ -52,8 +52,6 @@ def funcEmpleado() :
     bonificaciones(dictEmpleado)
     categoria(dictEmpleado)
     
-    #dictEmpleado.
-    
     return dictEmpleado
 
 def salarioBase(prmDict) :
