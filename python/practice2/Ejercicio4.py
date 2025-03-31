@@ -1,8 +1,37 @@
 def main():
     while any:
+        dictProductos = {
+            "tet":{
+                "Nombre":"test",
+                "Precio":123.4,
+                "Stock":0
+            },
+            "tet1":{
+                "Nombre":"text1",
+                "Precio":123.4,
+                "Stock":0
+            },
+            "tet2":{
+                "Nombre":"text2",
+                "Precio":123.4,
+                "Stock":0
+            },
+            "te1":{
+                "Nombre":"test1",
+                "Precio":123.4,
+                "Stock":1
+            },
+            "te2":{
+                "Nombre":"test2",
+                "Precio":123.4,
+                "Stock":2
+            }
+        }
         varOpcion = mainMenu()
         if varOpcion == 1:
             print("\n_____ REGISTRAR PRODUCTO _____")
+            registrarProducto(dictProductos)
+            print(dictProductos)
             
         elif varOpcion == 0:
             print("\nSaliendo...\n")
@@ -24,18 +53,41 @@ def mainMenu():
         except:
             print("Ingrese un numero entero positivo\n")
             
-def registrarProducto():
-    varNombre = validarNombre()
+def registrarProducto(prmDictProductos):
+    varNombre = validarNombre(prmDictProductos)
     varPrecio = validarPrecio()
     varStock = validarStock()
+    varClave = varNombre[0:2] + varNombre[-1]
+    
+    varCount = 0
+    while varClave in prmDictProductos:
+        varCount += 1
+        if varCount == 1:
+            varClave += str(varCount)
+        else:
+            varClave = varClave[:-1] + str(varCount)
+            
+    prmDictProductos.update({varClave:dict({"Nombre":varNombre,"Precio":varPrecio,"Stock":varStock})})
+            
+            
 
-def validarNombre():
+def validarNombre(prmDictProductos):
     while any:
+        varFlag = 0
         print("Nombre del producto:")
         varNombre = input()
         
-        if varNombre.isalnum:
-        print("El nombre debe ser alfanumerico\n")
+        if not varNombre.isalnum:
+            print("El nombre debe ser alfanumerico\n")
+        
+        for varProducto in prmDictProductos.values():
+            if varNombre in dict(varProducto).values():
+                print("El nombre del producto ya existe\n")
+                varFlag = -1
+                break
+            
+        if varFlag == 0:
+            return varNombre
             
 def validarPrecio():
     while any:
