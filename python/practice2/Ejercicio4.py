@@ -4,28 +4,9 @@ def main():
                 "Nombre":"test",
                 "Precio":123.4,
                 "Stock":0
-            },
-            "tet1":{
-                "Nombre":"text1",
-                "Precio":123.4,
-                "Stock":0
-            },
-            "tet2":{
-                "Nombre":"text2",
-                "Precio":123.4,
-                "Stock":0
-            },
-            "te1":{
-                "Nombre":"test1",
-                "Precio":123.4,
-                "Stock":1
-            },
-            "te2":{
-                "Nombre":"test2",
-                "Precio":123.4,
-                "Stock":2
             }
         }
+    varVentas = 0
     while any:
         varOpcion = mainMenu()
         if varOpcion == 1:
@@ -37,6 +18,15 @@ def main():
         elif varOpcion == 3:
             actualizarStock(dictProductos)
             
+        elif varOpcion == 4:
+            varClave, varUnidades, varVenta = venderProducto(dictProductos)
+            if varUnidades == 0:
+                continue
+            print(f"Se ha vendido con exito '{varUnidades}' unidades de '{dictProductos[varClave]["Nombre"]}' por un total de '{varVenta}'")
+            varVentas = round(varVentas + varVenta, 2)
+            
+        elif varOpcion == 5:
+            print(f"Ventas totales: {varVentas}")
             
         elif varOpcion == 0:
             print("\nSaliendo...\n")
@@ -49,11 +39,12 @@ def mainMenu():
             print("1. Mostrar productos")
             print("2. Registrar producto")
             print("3. Actualizar stock")
-    
+            print("4. Vender")
+            print("5. Valor ventas")
             print("0. Salir")
             print("Seleccione una opcion:")
             varOpcion = int(input())
-            if 0 <= varOpcion <= 3:
+            if 0 <= varOpcion <= 5:
                 return varOpcion
             else:
                 print("Ingrese una opcion valida\n")
@@ -94,24 +85,40 @@ def registrarProducto(prmDictProductos):
     
 def actualizarStock(prmDictProductos):
     print("\n_____ ACTUALIZAR STOCK _____")
+    varClave, varProducto = busquedaPorCodigo(prmDictProductos)
+    mostrarProductos(varProducto)
+    print("\nIngrese el nuevo stock...")
+    varStock = validarStock()
+    varContent = dict(varProducto[varClave])
+    varTemp = varContent["Stock"]
+    varContent["Stock"] = varStock
+    prmDictProductos[varClave] = varContent
+    varProducto = {varClave : dict(prmDictProductos[varClave])}
+    print(f"Se actualizo con exito el stock del producto de '{varTemp}' a '{varStock}'")
+            
+def venderProducto(prmDictProductos):
+    print("_____ VENDER PRODUCTO _____")
+    varClave, varProducto = busquedaPorCodigo(prmDictProductos)
+    mostrarProductos(varProducto)
+    varCantidad = validarCantidadVenta(varProducto[varClave])
+    if varCantidad == 0:
+        return 0, 0, 0
+    varVenta = round(varProducto[varClave]["Precio"] * varCantidad, 2)
+    varProducto[varClave]["Stock"] = varProducto[varClave]["Stock"] - varCantidad
+    prmDictProductos[varClave] = varProducto[varClave]
+    return varClave, varCantidad, varVenta
+    
+def busquedaPorCodigo(prmDictProductos):
     while any:
         print("Busqueda por codigo de producto: ")
         varClave = input()
         try:
             varProducto = {varClave : dict(prmDictProductos[varClave])}
             print("Producto encontrado...")
-            mostrarProductos(varProducto)
-            print("\nIngrese el nuevo stock...")
-            varStock = validarStock()
-            varContent = dict(varProducto[varClave])
-            varTemp = varContent["Stock"]
-            varContent["Stock"] = varStock
-            prmDictProductos[varClave] = varContent
-            varProducto = {varClave : dict(prmDictProductos[varClave])}
-            print(f"Se actualizo con exito el stock del producto de '{varTemp}' a '{varStock}'")
-            break
+            return varClave, varProducto
         except:
             print("Producto no encontrado\n")
+            
     
 def validarNombre(prmDictProductos):
     while any:
@@ -121,13 +128,13 @@ def validarNombre(prmDictProductos):
         if not varNombre.isalnum:
             print("El nombre debe ser alfanumerico\n")
             continue
-            
-        if len(varNombre) < 3:
-            print("El nombre debe tener al menos 3 caracteres\n")
-            continue
         
         if len(varNombre) > 23:
             print("El nombre solo puede contener hasta 23 caracteres\n")
+            continue
+            
+        if len(varNombre.replace(' ','')) < 3:
+            print("El nombre debe tener al menos 3 caracteres\n")
             continue
         
         for varProducto in prmDictProductos.values():
@@ -160,6 +167,23 @@ def validarStock():
                 print("El precio debe ser un numero entero positivo")
             else:
                 return varStock
+        except:
+            print("Ingrese un numero entero positivo\n")
+        
+def validarCantidadVenta(prmDictProductos):
+    while any:
+        try:
+            if prmDictProductos["Stock"] == 0:
+                print("No hay stock disponible de este producto para vender\n")
+                return 0
+            print("Ingrese la cantidad de que desea vender: ")
+            varCantidad = int(input())
+            if varCantidad < 1:
+                print("Debe escoger una cantidad mayor o igual a 1\n")
+            elif varCantidad > prmDictProductos["Stock"]:
+                print("Debe escoger una cantidad menor o igual al stock disponible\n")
+            else:
+                return varCantidad
         except:
             print("Ingrese un numero entero positivo\n")
             
