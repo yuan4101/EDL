@@ -29,24 +29,12 @@ def main():
     while any:
         varOpcion = mainMenu()
         if varOpcion == 1:
-            print("\n________________________ PRODUCTOS ________________________")
-            print("No.\tCLAVE\tNOMBRE\t\t\tPRECIO\t\tSTOCK")
-            varCount = 0
-            for varClave in dictProductos.keys():
-                varCount += 1
-                varNombre = str(dict(dictProductos[varClave])["Nombre"])
-                varPrecio = str(dict(dictProductos[varClave])["Precio"])
-                varStock = str(dict(dictProductos[varClave])["Stock"])
-                varNombre = setTabsString(varNombre, 3)
-                varPrecio = setTabsString(str(varPrecio), 2)
-                print(f"{varCount}\t{varClave}\t{varNombre}{varPrecio}{varStock}")
+            mostrarProductos(dictProductos)
                 
         elif varOpcion == 2:
-            print("\n_____ REGISTRAR PRODUCTO _____")
             registrarProducto(dictProductos)
             
         elif varOpcion == 3:
-            print("\n_____ ACTUALIZAR STOCK _____")
             actualizarStock(dictProductos)
             
             
@@ -72,7 +60,22 @@ def mainMenu():
         except:
             print("Ingrese un numero entero positivo\n")
             
+def mostrarProductos(prmDictProductos):
+    print("\n________________________ PRODUCTOS ________________________")
+    print("No.\tCLAVE\tNOMBRE\t\t\tPRECIO\t\tSTOCK")
+    varCount = 0
+    for varClave in prmDictProductos.keys():
+        dictProductos = dict(prmDictProductos[varClave])
+        varCount += 1
+        varNombre = str(dictProductos["Nombre"])
+        varPrecio = str(dictProductos["Precio"])
+        varStock = str(dictProductos["Stock"])
+        varNombre = setTabsString(varNombre, 3)
+        varPrecio = setTabsString(str(varPrecio), 2)
+        print(f"{varCount}\t{varClave}\t{varNombre}{varPrecio}{varStock}")
+            
 def registrarProducto(prmDictProductos):
+    print("\n_____ REGISTRAR PRODUCTO _____")
     varNombre = validarNombre(prmDictProductos)
     varPrecio = validarPrecio()
     varStock = validarStock()
@@ -90,25 +93,25 @@ def registrarProducto(prmDictProductos):
     print(f"Se registro con exito el producto con el Codigo: '{varClave}' -> {str(prmDictProductos[varClave])}")
     
 def actualizarStock(prmDictProductos):
+    print("\n_____ ACTUALIZAR STOCK _____")
     while any:
         print("Busqueda por codigo de producto: ")
         varClave = input()
         try:
-            varProducto = dict(prmDictProductos[varClave])
-            print(f"Producto encontrado: {varProducto}\n")
-            print("Ingrese el nuevo stock: ")
+            varProducto = {varClave : dict(prmDictProductos[varClave])}
+            print("Producto encontrado...")
+            mostrarProductos(varProducto)
+            print("\nIngrese el nuevo stock...")
             varStock = validarStock()
-            varProducto["Stock"] = varStock
-            prmDictProductos[varClave] = varProducto
-            print(f"Se actualizo con exito el producto: {prmDictProductos[varClave]}")
+            varContent = dict(varProducto[varClave])
+            varTemp = varContent["Stock"]
+            varContent["Stock"] = varStock
+            prmDictProductos[varClave] = varContent
+            varProducto = {varClave : dict(prmDictProductos[varClave])}
+            print(f"Se actualizo con exito el stock del producto de '{varTemp}' a '{varStock}'")
             break
         except:
             print("Producto no encontrado\n")
-        #print(prmDictProductos[varClave])
-        #varTemp = dict(prmDictProductos[varClave])["Stock"]
-        #dict(prmDictProductos[varClave])["Stock"] = prmValor
-        #print(f"Se actualizo con exito el Stock del producto de {varTemp} a {prmValor} -> '{varClave}' -> {str(prmDictProductos[varClave])}")
-    
     
 def validarNombre(prmDictProductos):
     while any:
