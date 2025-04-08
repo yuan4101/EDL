@@ -1,2 +1,26 @@
+# Archivos y carpetas de compilación de Rust
+**/target/
+**/*.rs.bk
+
+# Archivos de lock temporales
+Cargo.lock
+
+# Archivos creados por pruebas o herramientas
+*.log
+*.tmp
+*.swp
 *.exe
-*.vscode
+*.pdb
+
+# Archivos específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Archivos de configuración de Rust Analyzer
+rust-project.json
+
+# Archivos de backup temporales
+*~
