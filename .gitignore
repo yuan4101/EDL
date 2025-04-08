@@ -1,2 +1,4 @@
 *.exe
 *.vscode
+*.pdb
+*.target
